@@ -53,8 +53,6 @@ const validate_token = async (request, response, callback) => {
 const register_token = async (response, document) => {
 
     return JWT.sign(document, KEY, { expiresIn: EXPIRATION }, (error, token) => {
-        console.log(document);
-        console.log(error);
         if (error)
             return response.status(400).json('Unable to register token.');
         return response.json({ token: token });
@@ -63,7 +61,7 @@ const register_token = async (response, document) => {
 
 const formatted_token = async (request) => {
 
-    return await JWT.verify(request.token, KEY, (error, data) => {
+    return JWT.verify(request.token, KEY, (error, data) => {
         if (error)
             return null;
         return data;

@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
+const MultimediaSourceEnum = require('../utils/enums/multimedia_source');
+
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
     source: {
         type: String,
-        enum: ['photo', 'video', 'live'],
+        enum: [
+            MultimediaSourceEnum.LIVE,
+            MultimediaSourceEnum.VIDEO,
+            MultimediaSourceEnum.PHOTO
+        ],
         required: true
     },
     path: {

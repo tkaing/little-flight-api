@@ -1,54 +1,55 @@
 const express = require("express");
 
-const manager = require('./../api/api_manager');
+const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
-const validation = require('./../api/api_validation');
+const controller = require('./../api/api_controller');
 
-const endpoints = require('./../endpoints/persons');
+const endpoint = require('../endpoints/person');
 const PersonModel = require('./../models/person');
 
 const router = express.Router();
 
 router.get(
-    endpoints.fetch_by_token,
+    endpoint.fetch_by_token,
     security.validate_token,
     async (request, response) => {
-        return manager.exec(
+        return mongo.execute(
             request, response, async () => {
 
-                const appUser = await manager.getUser(request);
+                const appUser = await controller.get_user(request);
 
                 const document = await PersonModel.findById(appUser.id);
 
                 return (document)
-                    ? response.json(document)
-                    : response.status(404).json(validation.NotFound);
+                    ? controller.json(response, document)
+                    : controller.createNotFound(response);
             }
         );
     }
 );
 
 router.post(
-    endpoints.sign_up,
+    endpoint.sign_up,
     async (request, response) => {
-        return manager.exec(
+        return mongo.execute(
             request, response, async () => {
 
-                const { username, password } = request.body;
+                const { email, username, password } = request.body;
 
-                let document = await PersonModel.findOne({ username: username });
+                let document = await PersonModel.findOne({ email: email });
 
                 if (document)
-                    return response.status(403).json('Un utilisateur avec cet identifiant existe déjà !');
+                    return controller.failure(response, 'Un utilisateur avec cet email existe déjà !');
 
                 const person = new PersonModel({
+                    email: email,
                     username: username,
                     password: security.encrypt(password)
                 });
 
                 await person.save()
-                    .then(result => document = result)
-                    .catch(failure => response.status(400).json(failure.errors));
+                    .then(data => document = data)
+                    .catch(failure => controller.failure(response, failure.errors));
 
                 return await security.register_token(response, document.toJSON());
             }
@@ -57,20 +58,20 @@ router.post(
 );
 
 router.post(
-    endpoints.sign_in,
+    endpoint.sign_in,
     async (request, response) => {
-        return manager.exec(
+        return mongo.execute(
             request, response, async () => {
 
-                const { username, password } = request.body;
+                const { email, password } = request.body;
 
-                const document = PersonModel.findOne({
-                    username: username.toLowerCase(),
+                const document = await PersonModel.findOne({
+                    email: email.toLowerCase(),
                     password: security.encrypt(password)
                 });
 
                 if (!document)
-                    return response.status(404).json('L\'identifiant ou le mot de passe est incorrect !');
+                    return controller.failure(response, 'L\'email ou le mot de passe est incorrect !');
 
                 return await security.register_token(response, document.toJSON());
             }

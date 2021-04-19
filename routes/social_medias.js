@@ -4,8 +4,8 @@ const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
 const controller = require('./../api/api_controller');
 
-const endpoint = require('../endpoints/multimedia');
-const MultimediaModel = require('./../models/multimedia');
+const endpoint = require('../endpoints/social_media');
+const SocialMediaModel = require('./../models/social_media');
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.get(
 
                 const { id } = request.params;
 
-                const document = await MultimediaModel.findById(id);
+                const document = await SocialMediaModel.findById(id);
 
                 return (document)
                     ? controller.json(response, document)
@@ -37,7 +37,7 @@ router.get(
 
                 const appUser = await controller.get_user(request);
 
-                const listOfDocuments = await MultimediaModel.find({ person: appUser.id });
+                const listOfDocuments = await SocialMediaModel.find({ person: appUser.id });
 
                 return controller.json(response, listOfDocuments);
             }
@@ -54,37 +54,10 @@ router.post(
 
                 const appUser = await controller.get_user(request);
 
-                const document = new MultimediaModel({
+                const document = new SocialMediaModel({
                     ...(request.body),
-                    person: appUser.id,
-                    createdAt: new Date()
+                    person: appUser.id
                 });
-
-                await document.save()
-                    .then(data => controller.json(response, data))
-                    .catch(failure => controller.failure(response, failure.errors));
-            }
-        );
-    }
-);
-
-router.patch(
-    endpoint.update_by_id,
-    controller.object_id(),
-    async (request, response) => {
-        return mongo.execute(
-            request, response, async () => {
-
-                const { id } = request.params;
-                const { path, source } = request.body;
-
-                const document = await MultimediaModel.findById(id);
-
-                if (!document)
-                    return controller.createNotFound(response);
-
-                document.path = path;
-                document.source = source;
 
                 await document.save()
                     .then(data => controller.json(response, data))
@@ -103,12 +76,12 @@ router.delete(
 
                 const { id } = request.params;
 
-                const document = await MultimediaModel.findById(id);
+                const document = await SocialMediaModel.findById(id);
 
                 if (!document)
                     return controller.createNotFound(response);
 
-                await MultimediaModel.deleteOne({ _id: id });
+                await SocialMediaModel.deleteOne({ _id: id });
 
                 return controller.json(response, { success: true });
             }

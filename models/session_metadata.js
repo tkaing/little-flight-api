@@ -22,6 +22,6 @@ const schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Session'
     }
-}, { collection: 'sessions_metadatas' });
+}, { collection: 'sessions_metadata' });
 
 module.exports = mongoose.model('SessionMetadata', schema);

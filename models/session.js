@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
+const SessionStateEnum = require('../utils/enums/session_state');
+
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
     state: {
         type: String,
-        enum: ['ready', 'active', 'finished'],
+        enum: [
+            SessionStateEnum.CREATED,
+            SessionStateEnum.READY,
+            SessionStateEnum.ACTIVE,
+            SessionStateEnum.FINISHED
+        ],
         required: true
     },
     location: {

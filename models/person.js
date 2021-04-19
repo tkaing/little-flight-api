@@ -9,7 +9,10 @@ const schema = new Schema({
         trim: true,
         unique: true,
         required: true,
-        validate: [validation.email.validate, validation.email.message()],
+        validate: [
+            validation.email.validate,
+            validation.email.message()
+        ],
         lowercase: true
     },
     username: {

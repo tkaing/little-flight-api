@@ -1,7 +1,4 @@
-const listOfCollections = [
-    'persons'
+module.exports = [
+    'persons',
+    'multimedias',
 ];
-
-module.exports = {
-    routes: listOfCollections.map((it) => `/${ it }` )
-};

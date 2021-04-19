@@ -3,8 +3,7 @@ const logger = require('morgan');
 const express = require('express');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
-
-const schema = require('./api/api_schema');
+const listOfRoutes = require('./api/api_routing');
 
 const app = express();
 
@@ -18,7 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // list of routes
-schema.routes.forEach((it) => app.use(it, require(`./routes/${ it }`)));
+listOfRoutes.forEach((it) => app.use(it, require(`./routes/${ it }`)));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

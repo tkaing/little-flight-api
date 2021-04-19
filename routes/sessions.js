@@ -4,8 +4,9 @@ const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
 const controller = require('./../api/api_controller');
 
-const endpoint = require('../endpoints/multimedia');
-const MultimediaModel = require('./../models/multimedia');
+const endpoint = require('../endpoints/session');
+const SessionModel = require('./../models/session');
+const SessionStateEnum = require('./../utils/enums/session_state');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get(
 
                 const { id } = request.params;
 
-                const document = await MultimediaModel.findById(id);
+                const document = await SessionModel.findById(id);
 
                 return (document)
                     ? controller.json(response, document)
@@ -37,7 +38,7 @@ router.get(
 
                 const appUser = await controller.get_user(request);
 
-                const listOfDocuments = await MultimediaModel.find({ person: appUser.id });
+                const listOfDocuments = await SessionModel.find({ person: appUser.id });
 
                 return controller.json(response, listOfDocuments);
             }
@@ -54,8 +55,9 @@ router.post(
 
                 const appUser = await controller.get_user(request);
 
-                const document = new MultimediaModel({
+                const document = new SessionModel({
                     ...(request.body),
+                    state: SessionStateEnum.CREATED,
                     person: appUser.id,
                     createdAt: new Date()
                 });
@@ -76,15 +78,17 @@ router.patch(
             request, response, async () => {
 
                 const { id } = request.params;
-                const { path, source } = request.body;
+                const { state } = request.body;
 
-                const document = await MultimediaModel.findById(id);
+                const document = await SessionModel.findById(id);
 
                 if (!document)
                     return controller.createNotFound(response);
 
-                document.path = path;
-                document.source = source;
+                document.state = state;
+                
+                if (state === SessionStateEnum.FINISHED)
+                    document.finishedAt = new Date();
 
                 await document.save()
                     .then(data => controller.json(response, data))
@@ -103,12 +107,12 @@ router.delete(
 
                 const { id } = request.params;
 
-                const document = await MultimediaModel.findById(id);
+                const document = await SessionModel.findById(id);
 
                 if (!document)
                     return controller.createNotFound(response);
 
-                await MultimediaModel.deleteOne({ _id: id });
+                await SessionModel.deleteOne({ _id: id });
 
                 return controller.json(response, { success: true });
             }
