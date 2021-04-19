@@ -1,5 +1,9 @@
 const schema = require('./api_schema');
-const { MongoClient, ObjectId } = require('mongodb');
+const security = require('./api_security');
+
+const mongoose = require('mongoose');
+const { param } = require('express-validator');
+const { ObjectId } = require('mongodb');
 
 const URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const DB_NAME = 'api-little-flight';
@@ -8,24 +12,31 @@ const _id = (id) => ObjectId(id);
 
 const exec = async (request, response, callback) => {
 
+    const routes = schema.routes;
     const baseUrl = request.baseUrl;
-    const listOfRoutes = schema.list.map((it) => `/${ it }`);
-    const routeIndex = listOfRoutes.findIndex((it) => it === baseUrl);
+    const routeIndex = routes.findIndex((it) => it === baseUrl);
 
     if (routeIndex === -1)
         return response.status(404).json('Collection introuvable.');
 
     try {
-        const client = new MongoClient(URI, { useUnifiedTopology: true });
-        await client.connect();
-        const finalResponse = await callback(client);
-        await client.close();
-        return finalResponse;
+        await mongoose.connect(`${ URI }/${ DB_NAME }`, { useNewUrlParser: true, useUnifiedTopology: true });
+        return await callback();
     } catch (e) {
-        return response.status(400).json(e.stack);
+        return response.status(500).json(e.stack);
     }
 };
 
+const getUser = async (request) => {
+
+    const appUser = await security.formatted_token(request);
+
+    return {
+        id: _id(appUser._id)
+    };
+};
+
+const param_id = () => param('id').customSanitizer(id => _id(id));
 
 const collection = (client, name) => {
     const dbi = client.db(DB_NAME);
@@ -33,7 +44,10 @@ const collection = (client, name) => {
 };
 
 module.exports = {
-    _id, exec,
+    _id,
+    exec,
+    getUser,
+    param_id,
     collection,
 
     fetch_one: async (criteria = {}) => {

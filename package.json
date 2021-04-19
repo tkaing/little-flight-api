@@ -6,17 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "ejs": "~2.6.1",
-    "md5": "^2.3.0",
-    "debug": "~2.6.9",
+    "assert": "^2.0.0",
     "axios": "^0.21.1",
-    "morgan": "~1.9.1",
-    "mongodb": "^3.6.3",
+    "cookie-parser": "~1.4.4",
+    "crypto-random-string": "^3.3.0",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "express-validator": "^6.7.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
-    "cookie-parser": "~1.4.4",
-    "express-validator": "^6.7.0",
-    "crypto-random-string": "^3.3.0"
+    "md5": "^2.3.0",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.12.4",
+    "morgan": "~1.9.1"
   }
 }

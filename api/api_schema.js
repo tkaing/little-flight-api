@@ -1,14 +1,7 @@
-const persons = 'persons';
-const galleries = 'galleries';
-const multimedias = 'multimedias';
+const listOfCollections = [
+    'persons'
+];
 
 module.exports = {
-    persons,
-    galleries,
-    multimedias,
-    list: [
-        persons,
-        galleries,
-        multimedias,
-    ]
+    routes: listOfCollections.map((it) => `/${ it }` )
 };

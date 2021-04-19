@@ -4,11 +4,7 @@ const express = require('express');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 
-const {
-    persons,
-    galleries,
-    multimedias
-} = require('./api/api_schema');
+const schema = require('./api/api_schema');
 
 const app = express();
 
@@ -21,10 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// list of routers
-app.use(`/${ persons }`, require('./routes/persons'));
-app.use(`/${ galleries }`, require('./routes/galleries'));
-app.use(`/${ multimedias }`, require('./routes/multimedias'));
+// list of routes
+schema.routes.forEach((it) => app.use(it, require(`./routes/${ it }`)));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
