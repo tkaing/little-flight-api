@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get(
     endpoint.fetch_by_id,
-    controller.object_id(),
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
@@ -35,7 +35,7 @@ router.get(
         return mongo.execute(
             request, response, async () => {
 
-                const appUser = await controller.get_user(request);
+                const appUser = await controller.getUser(request);
 
                 const listOfDocuments = await SocialMediaModel.find({ person: appUser.id });
 
@@ -52,7 +52,7 @@ router.post(
         return mongo.execute(
             request, response, async () => {
 
-                const appUser = await controller.get_user(request);
+                const appUser = await controller.getUser(request);
 
                 const document = new SocialMediaModel({
                     ...(request.body),
@@ -69,7 +69,7 @@ router.post(
 
 router.delete(
     endpoint.delete_by_id,
-    controller.object_id(),
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {

@@ -12,7 +12,8 @@ const router = express.Router();
 
 router.get(
     endpoint.fetch_by_id,
-    controller.object_id(),
+    security.validateToken,
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
@@ -31,12 +32,12 @@ router.get(
 
 router.get(
     endpoint.fetch_list_by_token,
-    security.validate_token,
+    security.validateToken,
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
 
-                const appUser = await controller.get_user(request);
+                const appUser = await controller.getUser(request);
 
                 const listOfDocuments = await SessionModel.find({ person: appUser.id });
 
@@ -48,12 +49,12 @@ router.get(
 
 router.post(
     endpoint.store_by_token,
-    security.validate_token,
+    security.validateToken,
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
 
-                const appUser = await controller.get_user(request);
+                const appUser = await controller.getUser(request);
 
                 const document = new SessionModel({
                     ...(request.body),
@@ -72,7 +73,8 @@ router.post(
 
 router.patch(
     endpoint.update_by_id,
-    controller.object_id(),
+    security.validateToken,
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
@@ -100,7 +102,8 @@ router.patch(
 
 router.delete(
     endpoint.delete_by_id,
-    controller.object_id(),
+    security.validateToken,
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {

@@ -5,6 +5,9 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const listOfRoutes = require('./api/api_routing');
 
+const firebaseAdmin = require('firebase-admin');
+const firebaseCredentials = require("./api/firebase-credentials.json");
+
 const app = express();
 
 // settings
@@ -15,6 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// firebase
+firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(firebaseCredentials)
+});
 
 // list of routes
 listOfRoutes.forEach((it) => app.use(it, require(`./routes/${ it }`)));

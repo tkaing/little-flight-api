@@ -2,19 +2,19 @@ const security = require('./api_security');
 const { param } = require('express-validator');
 const { ObjectId } = require('mongodb');
 
-const get_user = async (request) => {
+const getUser = async (request) => {
 
-    const appUser = await security.formatted_token(request);
+    const appUser = await security.formattedToken(request);
 
     return { id: ObjectId(appUser._id) };
 };
 
-const object_id = () => param('id').customSanitizer(id => ObjectId(id));
+const objectId = () => param('id').customSanitizer(id => ObjectId(id));
 
 module.exports = {
     json: (response, data) => response.json(data),
-    get_user,
+    getUser,
     failure: (response, data, statusCode = 400) => response.status(statusCode).json(data),
-    object_id,
+    objectId,
     createNotFound: (response) => response.status(404).json('404 Not Found.')
 }

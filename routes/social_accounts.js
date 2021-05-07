@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get(
     endpoint.fetch_by_id,
-    controller.object_id(),
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
@@ -52,7 +52,7 @@ router.post(
 
 router.delete(
     endpoint.delete_by_id,
-    controller.object_id(),
+    controller.objectId(),
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {

@@ -25,13 +25,12 @@ const schema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         minLength: 4
     },
-    socialAccount: {
-        type: Schema.Types.ObjectId,
-        ref: 'SocialAccount',
-        required: false
+    provider: {
+        type: String,
+        enum: ['google', 'twitch']
     }
 }, { collection: 'persons' });
 

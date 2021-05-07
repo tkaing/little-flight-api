@@ -21,10 +21,9 @@ const execute = async (request, response, callback) => {
         });
         return await callback();
     } catch (e) {
-        return response.status(500).json(e.stack);
+        console.log(e);
+        return response.status(500).json(e);
     }
 };
 
-module.exports = {
-    execute
-};
+module.exports = { execute };

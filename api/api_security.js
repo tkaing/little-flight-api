@@ -2,15 +2,15 @@ const md5 = require('md5');
 const JWT = require('jsonwebtoken');
 
 const KEY = process.env.JWT_KEY || '3hNP2w4mA';
-const EXPIRATION = '30m';
+const EXPIRATION = '2m';
 
 const encrypt = (password) => {
     return md5(password);
 };
 
-const verify_token = async (request) => {
+const verifyToken = (request) => {
 
-    return await JWT.verify(request.token, KEY, (error) => {
+    return JWT.verify(request.token, KEY, (error) => {
         if (error)
             return "Invalid token.";
         else
@@ -18,7 +18,7 @@ const verify_token = async (request) => {
     });
 };
 
-const verify_syntax = (request) => {
+const verifySyntax = (request) => {
 
     const authorization = request.headers.authorization;
 
@@ -35,14 +35,14 @@ const verify_syntax = (request) => {
     return "";
 };
 
-const validate_token = async (request, response, callback) => {
+const validateToken = async (request, response, callback) => {
 
-    const result_syntax = verify_syntax(request);
+    const result_syntax = verifySyntax(request);
 
     if (result_syntax !== "")
         return response.status(400).json(result_syntax);
 
-    const result_token = await verify_token(request);
+    const result_token = await verifyToken(request);
 
     if (result_token !== "")
         return response.status(400).json(result_token);
@@ -50,16 +50,16 @@ const validate_token = async (request, response, callback) => {
     callback();
 };
 
-const register_token = async (response, document) => {
+const registerToken = async (response, document) => {
 
-    return JWT.sign(document, KEY, { expiresIn: EXPIRATION }, (error, token) => {
+    return JWT.sign(document, KEY, { expiresIn: EXPIRATION }, (error, jwt) => {
         if (error)
             return response.status(400).json('Unable to register token.');
-        return response.json({ token: token });
+        return response.json({ jwt: jwt });
     });
 };
 
-const formatted_token = async (request) => {
+const formattedToken = async (request) => {
 
     return JWT.verify(request.token, KEY, (error, data) => {
         if (error)
@@ -70,9 +70,9 @@ const formatted_token = async (request) => {
 
 module.exports = {
     encrypt,
-    verify_token,
-    verify_syntax,
-    validate_token,
-    register_token,
-    formatted_token,
+    verifyToken,
+    verifySyntax,
+    validateToken,
+    registerToken,
+    formattedToken,
 };
