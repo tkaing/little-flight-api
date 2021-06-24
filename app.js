@@ -46,16 +46,13 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-const streamServer = http.createServer(function (request, response) {
-    // Log that a stream connection has come through
+/*const streamServer = http.createServer(function (request, response) {
     console.log(
         'Stream Connection on 3001 from: ' +
         request.socket.remoteAddress + ':' +
         request.socket.remotePort
     );
-    // When data comes from the stream (FFmpeg) we'll pass this to the web socket
     request.on('data', function(data) {
-        // Now that we have data let's pass it to the web socket server
         webSocketServer.broadcast(data);
     });
 }).listen(3001);
@@ -80,15 +77,12 @@ setTimeout(function() {
         "-codec:v", "mpeg1video",
         "-b", "800k",
         "-f", "mpegts",
-        "http://127.0.0.1:3001/stream"
+        "http://192.168.10.2:3001/stream"
     ];
-    // Spawn an ffmpeg instance
     var streamer = spawn('ffmpeg', args);
-    // Uncomment if you want to see ffmpeg stream info
-    //streamer.stderr.pipe(process.stderr);
     streamer.on("exit", function(code){
         console.log("Failure", code);
     });
-}, 3000);
+}, 3000);*/
 
 module.exports = app;

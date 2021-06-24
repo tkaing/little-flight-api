@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 const controller = require('./../api/api_controller');
 
 const dgram = require('dgram');
-const client = dgram.createSocket('udp4');
+const client = dgram.createSocket({ type: 'udp4' });
 
 const PORT = 8889;
 const HOST = '192.168.10.1';
@@ -64,7 +64,7 @@ router.get(
         try {
             console.log(_bind);
             if (!_bind) {
-                client.bind(8001);
+                client.bind(8002);
                 _bind = true;
             }
             client.on('message', (msg) => {
@@ -86,7 +86,7 @@ router.get(
     async (request, response) => {
         try {
             if (!_bind) {
-                client.bind(8001);
+                client.bind(8003);
                 _bind = true;
             }
             client.on('message', (msg) => {

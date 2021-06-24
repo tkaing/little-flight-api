@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validation = require('./../api/api_validation');
+const { ObjectId } = require('mongodb');
 
 const Schema = mongoose.Schema;
 
@@ -31,7 +32,8 @@ const schema = new Schema({
     provider: {
         type: String,
         enum: ['google', 'twitch']
-    }
+    },
+    friends: [{ type : ObjectId, ref: 'Person' }]
 }, { collection: 'persons' });
 
 module.exports = mongoose.model('Person', schema);
