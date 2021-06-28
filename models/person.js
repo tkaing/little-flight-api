@@ -33,7 +33,16 @@ const schema = new Schema({
         type: String,
         enum: ['google', 'twitch']
     },
-    friends: [{ type : ObjectId, ref: 'Person' }]
+    friends: [{
+        person: {
+            ref: 'Person',
+            type : ObjectId
+        },
+        isAccepted: {
+            type: Boolean,
+            default: false
+        }
+    }]
 }, { collection: 'persons' });
 
 module.exports = mongoose.model('Person', schema);
