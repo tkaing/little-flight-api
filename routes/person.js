@@ -132,7 +132,7 @@ router.post(
                 const personAsFriend = await PersonModel.findOne({ username: username });
 
                 if (!personAsFriend)
-                    return controller.failure(response, 'NOT FOUND.', 404);
+                    return controller.failure(response, 'NOT FOUND', 404);
 
                 if (appUser._id.toString() === personAsFriend._id.toString())
                     return controller.failure(response, 'MYSELF', 403);
@@ -181,9 +181,22 @@ router.patch(
                 if (_index > -1)
                     appUser.friends[_index].isAccepted = true;
 
-                await appUser.save()
-                    .then(data => controller.json(response, data))
-                    .catch(failure => controller.failure(response, failure.errors));
+                await appUser.save();
+                    /*.then(data => controller.json(response, data))
+                    .catch(failure => controller.failure(response, failure.errors));*/
+
+                const listOfFriends = [];
+
+                if (!Array.isArray(appUser.friends))
+                    appUser.friends = [];
+
+                for await (_it of appUser.friends) {
+                    _it.person = await PersonModel.findOne({ _id: _it.person });
+                    if (_it.person)
+                        listOfFriends.push(_it);
+                }
+
+                return controller.json(response, listOfFriends);
             }
         )
     }
@@ -210,9 +223,22 @@ router.delete(
                 if (_index > -1)
                     appUser.friends.splice(_index, 1);
 
-                await appUser.save()
-                    .then(data => controller.json(response, data))
-                    .catch(failure => controller.failure(response, failure.errors));
+                await appUser.save();
+                    /*.then(data => controller.json(response, data))
+                    .catch(failure => controller.failure(response, failure.errors));*/
+
+                const listOfFriends = [];
+
+                if (!Array.isArray(appUser.friends))
+                    appUser.friends = [];
+
+                for await (_it of appUser.friends) {
+                    _it.person = await PersonModel.findOne({ _id: _it.person });
+                    if (_it.person)
+                        listOfFriends.push(_it);
+                }
+
+                return controller.json(response, listOfFriends);
             }
         )
     }
