@@ -1,5 +1,3 @@
 module.exports = [
-    'person',
-    'multimedia',
-    'drone',
+    'person'
 ];

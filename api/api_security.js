@@ -2,7 +2,7 @@ const md5 = require('md5');
 const JWT = require('jsonwebtoken');
 
 const KEY = process.env.JWT_KEY || '3hNP2w4mA';
-const EXPIRATION = '10m';
+const EXPIRATION = '30m';
 
 const encrypt = (password) => {
     return md5(password);
