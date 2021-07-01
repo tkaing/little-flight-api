@@ -1,4 +1,5 @@
 const path = require('path');
+const cors = require('cors');
 const logger = require('morgan');
 const express = require('express');
 const nocache = require('nocache');
@@ -26,7 +27,7 @@ firebaseAdmin.initializeApp({
 });
 
 // express cors
-const cors = function (request, response, next) {
+/*const cors = function (request, response, next) {
     const whitelist = [
         'http://localhost:3000/',
         'http://127.0.0.1:3000/',
@@ -35,8 +36,8 @@ const cors = function (request, response, next) {
     if (whitelist.indexOf(origin) > -1)
         response.setHeader('Access-Control-Allow-Origin', origin);
     next();
-}
-app.use(cors);
+}*/
+app.use(cors());
 app.use(nocache());
 
 // list of routes
