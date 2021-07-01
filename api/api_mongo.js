@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const listOfRoutes = require('./api_routing');
 
 const URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const DB_NAME = 'api-little-flight';
+const DB_NAME = 'little-flight-api';
 
 const execute = async (request, response, callback) => {
 
