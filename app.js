@@ -1,6 +1,7 @@
 const path = require('path');
 const logger = require('morgan');
 const express = require('express');
+const nocache = require('nocache');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const listOfRoutes = require('./api/api_routing');
@@ -23,6 +24,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(firebaseCredentials)
 });
+
+// express cors
+const cors = function (request, response, next) {
+    const whitelist = [
+        'http://localhost:3000/',
+        'http://127.0.0.1:3000/',
+    ];
+    const origin = request.headers.origin;
+    if (whitelist.indexOf(origin) > -1)
+        response.setHeader('Access-Control-Allow-Origin', origin);
+    next();
+}
+app.use(cors);
+app.use(nocache());
 
 // list of routes
 listOfRoutes.forEach((it) => app.use(it, require(`./routes/${ it }`)));
