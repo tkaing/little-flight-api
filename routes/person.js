@@ -5,6 +5,7 @@ const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
 const controller = require('./../api/api_controller');
 
+const util = require('../utils/person');
 const endpoint = require('../endpoints/person');
 const PersonModel = require('./../models/person');
 
@@ -116,6 +117,8 @@ router.post(
     }
 );
 
+// === Points ===
+
 // === Friend ===
 
 router.post(
@@ -185,16 +188,7 @@ router.patch(
                     /*.then(data => controller.json(response, data))
                     .catch(failure => controller.failure(response, failure.errors));*/
 
-                const listOfFriends = [];
-
-                if (!Array.isArray(appUser.friends))
-                    appUser.friends = [];
-
-                for await (_it of appUser.friends) {
-                    _it.person = await PersonModel.findOne({ _id: _it.person });
-                    if (_it.person)
-                        listOfFriends.push(_it);
-                }
+                const listOfFriends = await util.list_of_friends(appUser);
 
                 return controller.json(response, listOfFriends);
             }
@@ -227,16 +221,7 @@ router.delete(
                     /*.then(data => controller.json(response, data))
                     .catch(failure => controller.failure(response, failure.errors));*/
 
-                const listOfFriends = [];
-
-                if (!Array.isArray(appUser.friends))
-                    appUser.friends = [];
-
-                for await (_it of appUser.friends) {
-                    _it.person = await PersonModel.findOne({ _id: _it.person });
-                    if (_it.person)
-                        listOfFriends.push(_it);
-                }
+                const listOfFriends = await util.list_of_friends(appUser);
 
                 return controller.json(response, listOfFriends);
             }
@@ -255,16 +240,7 @@ router.get(
 
                 const appUser = await PersonModel.findOne({ _id: token.id });
 
-                const listOfFriends = [];
-
-                if (!Array.isArray(appUser.friends))
-                    appUser.friends = [];
-
-                for await (_it of appUser.friends) {
-                    _it.person = await PersonModel.findOne({ _id: _it.person });
-                    if (_it.person)
-                        listOfFriends.push(_it);
-                }
+                const listOfFriends = await util.list_of_friends(appUser);
 
                 return controller.json(response, listOfFriends);
             }
