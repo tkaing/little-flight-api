@@ -3,25 +3,23 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    speed: {
+    subject: {
         type: String
     },
-    duration: {
-        type: String
-    },
-    location: {
-        type: String
+    isClosed: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date
     },
-    finishedAt: {
-        type: Date
+    description: {
+        type: String
     },
     person: {
         ref: 'Person',
         type: Schema.Types.ObjectId
     }
-}, { collection: 'sessions' });
+}, { collection: 'reports' });
 
-module.exports = mongoose.model('Session', schema);
+module.exports = mongoose.model('Report', schema);

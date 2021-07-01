@@ -12,6 +12,17 @@ const OAuth2 = googleApi.auth.OAuth2;
 const router = express.Router();
 
 router.get(
+    endpoint.list,
+    async (request, response) => {
+        return mongo.execute(
+            request, response, async () => {
+                return controller.json(response, (await PersonModel.find()))
+            }
+        );
+    }
+);
+
+router.get(
     endpoint.fetch_by_token,
     security.validateToken,
     async (request, response) => {

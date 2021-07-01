@@ -4,8 +4,8 @@ const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
 const controller = require('./../api/api_controller');
 
-const endpoint = require('../endpoints/session');
-const SessionModel = require('./../models/session');
+const endpoint = require('../endpoints/report');
+const ReportModel = require('./../models/report');
 
 const router = express.Router();
 
@@ -14,14 +14,14 @@ router.get(
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
-                return controller.json(response, (await SessionModel.find().populate('person')))
+                return controller.json(response, (await ReportModel.find().populate('person')))
             }
         );
     }
 );
 
 router.post(
-    endpoint.create,
+    endpoint.open,
     security.validateToken,
     async (request, response) => {
         return mongo.execute(
@@ -29,9 +29,9 @@ router.post(
 
                 const appUser = await controller.getUser(request);
 
-                const document = new SessionModel({
+                const document = new ReportModel({
                     ...(request.body),
-                    person: appUser.id,
+                    person: appUser.id
                 });
 
                 await document.save();
@@ -43,7 +43,7 @@ router.post(
 );
 
 router.patch(
-    endpoint.update,
+    endpoint.close,
     security.validateToken, controller.objectId(),
     async (request, response) => {
         return mongo.execute(
@@ -51,15 +51,12 @@ router.patch(
 
                 const { id } = request.params;
 
-                let document = await SessionModel.findById(id);
+                let document = await ReportModel.findById(id);
 
                 if (!document)
                     return controller.createNotFound(response);
 
-                document = {
-                    ...document,
-                    ...(request.body)
-                };
+                document.isClosed = true;
 
                 await document.save();
 
