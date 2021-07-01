@@ -7,10 +7,4 @@ module.exports = {
     // === Points ===
     send_points_to_friend: '/send_points_to_friend/:id',
     list_of_points: '/list_of_points',
-
-    // === Friend ===
-    add_friend: '/add_friend',
-    accept_friend: '/accept_friend/:id',
-    reject_friend: '/reject_friend/:id',
-    list_of_friends: '/list_of_friends',
 };
