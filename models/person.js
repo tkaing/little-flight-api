@@ -29,6 +29,23 @@ const schema = new Schema({
         required: false,
         minLength: 4
     },
+    dronies: [
+        {
+            amount: {
+                type: Number,
+                required: true,
+            },
+            createdAt: {
+                type: Date,
+                required: true,
+            },
+            sender: {
+                ref: 'Person',
+                type : ObjectId,
+                required: true
+            }
+        }
+    ],
     provider: {
         type: String,
         enum: ['google', 'twitch']
