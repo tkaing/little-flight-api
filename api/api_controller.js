@@ -10,11 +10,13 @@ const getUser = async (request) => {
 };
 
 const objectId = () => param('id').customSanitizer(id => ObjectId(id));
+const toObjectId = (_id) => ObjectId(_id);
 
 module.exports = {
     json: (response, data) => response.json(data),
     getUser,
     failure: (response, data, statusCode = 400) => response.status(statusCode).json(data),
     objectId,
+    toObjectId,
     createNotFound: (response) => response.status(404).json('404 Not Found.')
 }

@@ -58,7 +58,8 @@ router.post(
                     new PersonModel({
                         email: email,
                         username: username,
-                        password: security.encrypt(password)
+                        password: security.encrypt(password),
+                        dronies: 0
                     })
                 ).save();
 

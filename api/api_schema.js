@@ -3,4 +3,5 @@ module.exports = [
     'person',
     'friend',
     'session',
+    'drony'
 ];
