@@ -12,9 +12,11 @@ const schema = new Schema({
     battery: {
         type: String
     },
+    // Date à laquelle la session a été créé
     createdAt: {
         type: Date
     },
+    // Utilisateur ayant lancé la session
     person: {
         ref: 'Person',
         type: Schema.Types.ObjectId

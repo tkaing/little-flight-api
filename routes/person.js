@@ -29,8 +29,8 @@ router.get(
         return mongo.execute(
             request, response, async () => {
 
+                // Récupère l'utilisateur enregistré par le token
                 const appUser = await controller.getUser(request);
-
                 const document = await PersonModel.findById(appUser.id);
 
                 return (document)
@@ -48,12 +48,13 @@ router.post(
             request, response, async () => {
 
                 const { email, username, password } = request.body;
-
                 const personFromDb = await PersonModel.findOne({ email: email });
 
+                // Vérifie que l'utilisateur n'existe pas
                 if (personFromDb)
                     return controller.failure(response, 'Un utilisateur avec cet email existe déjà !');
 
+                // Ajoute un utilisateur dans la base
                 const person = await (
                     new PersonModel({
                         email: email,
@@ -82,6 +83,7 @@ router.post(
                     password: security.encrypt(password)
                 });
 
+                // Vérifie que les données saisies sont correctes ou non
                 if (!personFromDb)
                     return controller.failure(response, 'L\'email ou le mot de passe est incorrect !');
 
@@ -97,23 +99,25 @@ router.post(
         return mongo.execute(
             request, response, async () => {
 
+                // Récupère le token généré par Google
                 const accessToken = request.query.access_token;
 
                 if (!accessToken)
                     return controller.failure(response, 'Invalid token.');
 
+                // Récupère les informations de l'utilisateur depuis un compte Google
                 const oauth2Client = new OAuth2();
                 oauth2Client.setCredentials({ access_token: accessToken });
-
                 const oauth2 = googleApi.oauth2({ auth: oauth2Client, version: 'v2' });
                 const googleResponse = await oauth2.userinfo.get();
-
                 const personFromGoogle = googleResponse.data;
-                const personFromDb = await PersonModel.findOne({ email: personFromGoogle.email });
 
+                // Vérifie que l'utilisateur n'existe pas dans notre base
+                const personFromDb = await PersonModel.findOne({ email: personFromGoogle.email });
                 if (personFromDb)
                     return await security.registerToken(response, personFromDb.toJSON());
 
+                // Ajoute un utilisateur dans la base
                 const person = await (
                     new PersonModel({
                         email: personFromGoogle.email,

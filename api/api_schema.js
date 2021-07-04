@@ -1,3 +1,4 @@
+// Liste des schémas existants
 module.exports = [
     'report',
     'person',

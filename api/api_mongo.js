@@ -26,4 +26,7 @@ const execute = async (request, response, callback) => {
     }
 };
 
-module.exports = { execute };
+module.exports = {
+    // Exécute un callback (logique du code) à partir d'une instance Mongoose
+    execute
+};

@@ -28,6 +28,7 @@ router.get(
         return mongo.execute(
             request, response, async () => {
 
+                // Récupère l'utilisateur enregistré par le token
                 const token = await controller.getUser(request);
                 const appUser = await PersonModel.findOne({ _id: token.id });
 
@@ -48,12 +49,15 @@ router.post(
 
                 const { list } = request.body;
 
+                // Vérifie que "list" est un tableau
                 if (!Array.isArray(list))
                     return controller.failure(response, "WRONG FORMAT");
 
+                // Récupère l'utilisateur enregistré par le token
                 const token = await controller.getUser(request);
                 const appUser = await PersonModel.findOne({ _id: token.id });
 
+                // Ajoute chaque session depuis la liste
                 for await (_it of list) {
                     await new SessionModel({
                         ..._it,

@@ -29,13 +29,15 @@ const schema = new Schema({
         required: false,
         minLength: 4
     },
+    // Les dronies cumulés de l'utilisateur
     dronies: {
         type: Number,
         required: true
     },
+    // Permet de savoir si l'utilisateur s'est inscrit via Google Connect
     provider: {
         type: String,
-        enum: ['google', 'twitch']
+        enum: ['google']
     },
 }, { collection: 'persons' });
 

@@ -69,10 +69,16 @@ const formattedToken = async (request) => {
 };
 
 module.exports = {
+    // Encode un mot de passe avec la méthode md5
     encrypt,
+    // Vérifie la validité du token
     verifyToken,
+    // Vérifie la syntaxe du token
     verifySyntax,
+    // Vérifie la syntaxe puis la validité du token
     validateToken,
+    // Enregistre le token
     registerToken,
+    // Récupère les données du token
     formattedToken,
 };

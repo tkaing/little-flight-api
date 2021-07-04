@@ -1,6 +1,7 @@
 const FriendModel = require('./../models/friend');
 
 module.exports = {
+    // Structure les demandes d'amis et les amis d'un utilisateur
     list_of_friends: async (appUser) => {
         return {
             requestByMe: {

@@ -27,13 +27,14 @@ router.post(
         return mongo.execute(
             request, response, async () => {
 
+                // Récupère l'utilisateur enregistré par le token
                 const appUser = await controller.getUser(request);
 
+                // Ajoute un nouveau rapport
                 const document = new ReportModel({
                     ...(request.body),
                     person: appUser.id
                 });
-
                 await document.save();
 
                 return controller.json(response, document);
@@ -56,8 +57,8 @@ router.patch(
                 if (!document)
                     return controller.createNotFound(response);
 
+                // Ferme un rapport
                 document.isClosed = true;
-
                 await document.save();
 
                 return controller.json(response, document);
