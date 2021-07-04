@@ -3,19 +3,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    speed: {
+    time: {
         type: String
     },
-    duration: {
+    temp: {
         type: String
     },
-    location: {
+    battery: {
         type: String
     },
     createdAt: {
-        type: Date
-    },
-    finishedAt: {
         type: Date
     },
     person: {

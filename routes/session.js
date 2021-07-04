@@ -5,6 +5,7 @@ const security = require('./../api/api_security');
 const controller = require('./../api/api_controller');
 
 const endpoint = require('../endpoints/session');
+const PersonModel = require('./../models/person');
 const SessionModel = require('./../models/session');
 
 const router = express.Router();
@@ -20,50 +21,50 @@ router.get(
     }
 );
 
-router.post(
-    endpoint.create,
+router.get(
+    endpoint.list_by_token,
     security.validateToken,
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
 
-                const appUser = await controller.getUser(request);
+                const token = await controller.getUser(request);
+                const appUser = await PersonModel.findOne({ _id: token.id });
 
-                const document = new SessionModel({
-                    ...(request.body),
-                    person: appUser.id,
-                });
-
-                await document.save();
-
-                return controller.json(response, document);
+                return controller.json(response, (
+                    await SessionModel.find({ person: appUser.id }).populate('person')
+                ));
             }
         );
     }
 );
 
-router.patch(
-    endpoint.update,
-    security.validateToken, controller.objectId(),
+router.post(
+    endpoint.import,
+    security.validateToken,
     async (request, response) => {
         return mongo.execute(
             request, response, async () => {
 
-                const { id } = request.params;
+                const { list } = request.body;
 
-                let document = await SessionModel.findById(id);
+                if (!Array.isArray(list))
+                    return controller.failure(response, "WRONG FORMAT");
 
-                if (!document)
-                    return controller.createNotFound(response);
+                const token = await controller.getUser(request);
+                const appUser = await PersonModel.findOne({ _id: token.id });
 
-                document = {
-                    ...document,
-                    ...(request.body)
-                };
+                for await (_it of list) {
+                    await new SessionModel({
+                        ..._it,
+                        person: appUser.id,
+                        createdAt: Date.now()
+                    }).save();
+                }
 
-                await document.save();
-
-                return controller.json(response, document);
+                return controller.json(response, (
+                    await SessionModel.find({ person: appUser.id }).populate('person')
+                ));
             }
         );
     }

@@ -1,5 +1,5 @@
 module.exports = {
     list: "/list",
-    create: "/create",
-    update: "/update/:id",
+    import: "/import",
+    list_by_token: "/list/token",
 };
