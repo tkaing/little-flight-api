@@ -29,6 +29,10 @@ const schema = new Schema({
         required: false,
         minLength: 4
     },
+    dronies: {
+        type: Number,
+        required: true
+    },
     provider: {
         type: String,
         enum: ['google', 'twitch']
