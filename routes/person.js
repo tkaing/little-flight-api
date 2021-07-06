@@ -122,7 +122,8 @@ router.post(
                     new PersonModel({
                         email: personFromGoogle.email,
                         username: personFromGoogle.name,
-                        provider: 'google'
+                        provider: 'google',
+                        dronies: 0
                     })
                 ).save();
 
