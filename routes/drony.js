@@ -29,6 +29,9 @@ router.post(
                 if (!appUser.dronies)
                     appUser.dronies = 0;
 
+                if (!adressee.dronies)
+                        adressee.dronies = 0;
+
                 appUser.dronies += 25;
                 adressee.dronies += amount;
 
