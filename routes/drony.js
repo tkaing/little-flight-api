@@ -49,7 +49,7 @@ router.post(
                     })
                 ).save();
 
-                return controller.json(response, await DronyModel.find({ _id: drony._id })
+                return controller.json(response, await DronyModel.findOne({ _id: drony._id })
                     .populate('sender')
                     .populate('adressee'));
             }
@@ -96,7 +96,7 @@ router.post(
                     })
                 ).save();
 
-                return controller.json(response, await DronyModel.find({ _id: drony._id })
+                return controller.json(response, await DronyModel.findOne({ _id: drony._id })
                     .populate('sender')
                     .populate('adressee'));
             }
