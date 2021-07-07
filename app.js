@@ -1,4 +1,5 @@
 const path = require('path');
+const cors = require('cors');
 const logger = require('morgan');
 const express = require('express');
 const nocache = require('nocache');
@@ -11,6 +12,15 @@ const firebaseCredentials = require("./api/firebase-credentials.json");
 
 // Initialise une instance express
 const app = express();
+
+// express cors
+app.use(cors({
+    origin: [
+        'http://127.0.0.1:3001',
+        'http://localhost:3001',
+        'http://littleflight.tchooz.fr'
+    ]
+}));
 
 // Paramètres de l'API
 app.set('views', path.join(__dirname, 'views'));

@@ -28,8 +28,10 @@ router.post(
                 // Met à jour les informations de l'utilisateur connecté et du destinataire des dronies
                 if (!appUser.dronies)
                     appUser.dronies = 0;
+
                 appUser.dronies += 25;
                 adressee.dronies += amount;
+
                 await appUser.save();
                 await adressee.save();
 
