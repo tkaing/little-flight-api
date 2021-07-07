@@ -16,8 +16,6 @@ const app = express();
 // express cors
 app.use(cors({
     origin: [
-        'http://127.0.0.1:3001',
-        'http://localhost:3001',
         'http://littleflight.tchooz.fr'
     ]
 }));
