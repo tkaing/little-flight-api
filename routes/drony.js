@@ -70,7 +70,7 @@ router.post(
                 // Récupère l'utilisateur enregistré par le token
                 const token = await controller.getUser(request);
                 const appUser = await PersonModel.findOne({ _id: token.id }); //token user (user connected)
-                const adressee = await PersonModel.findOne({ _id: controller.toObjectId("60de148ef21e47001509c2fd") }); //adressee
+                const adressee = await PersonModel.findOne({ _id: controller.toObjectId("60e5f10835885f00159f1a56") }); //adressee
 
                 // Met à jour les informations de l'utilisateur connecté et du destinataire des dronies
                 if (!appUser.dronies)
