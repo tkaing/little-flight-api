@@ -104,5 +104,13 @@ router.post(
     }
 );
 
+router.get(
+    '/live',
+    async (request, response) => {
+
+            return controller.json(response, "");
+    }
+)
+
 
 module.exports = router;
