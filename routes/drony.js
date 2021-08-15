@@ -112,7 +112,8 @@ router.get(
         const config = {
             logType: 3,
             rtmp: {
-                port: 1935,
+                //port: 1935,
+                port: 80,
                 chunk_size: 60000,
                 gop_cache: true,
                 ping: 30,
