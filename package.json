@@ -24,6 +24,7 @@
     "mongoose": "^5.12.4",
     "morgan": "~1.9.1",
     "nocache": "^3.0.1",
+    "node-media-server": "^2.3.8",
     "ws": "7.2.3"
   }
 }

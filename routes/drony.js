@@ -1,4 +1,5 @@
 const express = require("express");
+const NodeMediaServer = require('node-media-server');
 
 const mongo = require('./../api/api_mongo');
 const security = require('./../api/api_security');
@@ -107,6 +108,23 @@ router.post(
 router.get(
     '/live',
     async (request, response) => {
+
+            const config = {
+                    rtmp: {
+                            port: 1935,
+                            chunk_size: 60000,
+                            gop_cache: true,
+                            ping: 30,
+                            ping_timeout: 60
+                    },
+                    http: {
+                            port: 8000,
+                            allow_origin: '*'
+                    },
+            };
+
+            var nms = new NodeMediaServer(config)
+            nms.run();
 
             return controller.json(response, "");
     }
